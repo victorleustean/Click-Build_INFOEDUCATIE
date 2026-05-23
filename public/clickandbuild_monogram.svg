@@ -1,0 +1,13 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <title>click&&build monogram</title>
+  <!-- C shape -->
+  <path d="M105,52 A48,48 0 1,0 105,148" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <!-- B vertical stem -->
+  <line x1="112" y1="52" x2="112" y2="148" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <!-- B top bump -->
+  <path d="M112,52 Q148,52 148,76 Q148,100 112,100" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <!-- B bottom bump -->
+  <path d="M112,100 Q152,100 152,124 Q152,148 112,148" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round"/>
+  <!-- click dot -->
+  <circle cx="76" cy="164" r="6" fill="#111111" opacity="0.4"/>
+</svg>
