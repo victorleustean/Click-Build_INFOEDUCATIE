@@ -33,11 +33,11 @@ const Contact = () => {
       }}>
         Alătură-te miilor de utilizatori care își construiesc site-ul cu Click &amp;&amp; Build — gratuit, acum.
       </p>
-      <SignUpButton>
-        <Button size="lg" style={{ backgroundColor: '#e91e63', color: '#fff', fontSize: '1rem', padding: '0.75rem 2.5rem', marginTop: '0.5rem' }}>
-          Creează-ți contul gratuit
-        </Button>
-      </SignUpButton>
+      <SignUpButton forceRedirectUrl="/dashboard">
+    <Button size="lg" style={{ backgroundColor: '#e91e63', color: '#fff', fontSize: '1rem', padding: '0.75rem 2.5rem', marginTop: '0.5rem' }}>
+        Creează-ți contul gratuit
+    </Button>
+</SignUpButton>
     </section>
   )
 }

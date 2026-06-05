@@ -89,12 +89,12 @@ const Hero = () => {
                 Click &amp;&amp; Build transformă ideile tale în site-uri reale — fără cod, fără complicații. Descrie ce vrei și lasă AI-ul să construiască
             </p>
             <div style={{ display: 'flex', gap: '0.75rem', pointerEvents: 'all' }}>
-                <SignUpButton>
-                    <Button size="lg">Înregistrare</Button>
-                </SignUpButton>
-                <SignInButton>
-                    <Button size="lg" variant="outline">Conectare</Button>
-                </SignInButton>
+            <SignUpButton forceRedirectUrl="/dashboard">
+    <Button size="lg">Înregistrare</Button>
+</SignUpButton>
+<SignInButton forceRedirectUrl="/dashboard">
+    <Button size="lg" variant="outline">Conectare</Button>
+</SignInButton>
             </div>
         </div>
     </div>
