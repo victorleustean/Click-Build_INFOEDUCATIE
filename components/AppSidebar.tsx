@@ -1,17 +1,19 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ShadCN/sheet'
 import { ScrollArea } from '@/components/ShadCN/scroll-area'
 import { Button } from '@/components/ShadCN/button'
 import { PanelLeft, Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
-const placeholderSites = [
-  { id: '1', name: 'Site-ul meu', time: 'modificat ieri' },
-  { id: '2', name: 'Proiect nou', time: 'acum 3 zile' },
-  { id: '3', name: 'Landing page', time: 'săptămâna trecută' },
-  { id: '4', name: 'Portfolio', time: 'acum 2 săptămâni' },
-]
+type Site = {
+  id: string
+  name: string
+  title: string | null
+  updated_at: string
+}
 
 const Logo = () => (
   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -26,45 +28,92 @@ const Logo = () => (
   </div>
 )
 
-const SidebarContent = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-    <div style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
-      <Logo />
-      <Button size="sm" style={{ width: '100%', marginTop: '0.85rem', background: '#e91e63', color: '#fff', gap: '0.4rem' }}>
-        <Plus size={13} /> Site nou
-      </Button>
-    </div>
 
-    <ScrollArea style={{ flex: 1 }}>
-      <div style={{ padding: '0.75rem' }}>
-        <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem 0.25rem' }}>
-          Site-urile tale
-        </p>
-        {placeholderSites.map(site => (
-          <button key={site.id} style={{
-            width: '100%', textAlign: 'left', padding: '0.55rem 0.75rem',
-            borderRadius: '8px', border: 'none', background: 'transparent',
-            cursor: 'pointer', marginBottom: '2px', fontFamily: 'var(--font-jakarta), sans-serif',
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-          >
-            <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 500, color: '#111' }}>{site.name}</p>
-            <p style={{ margin: 0, fontSize: '0.72rem', color: '#aaa' }}>{site.time}</p>
-          </button>
-        ))}
-      </div>
-    </ScrollArea>
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const min = Math.floor(diff / 60000)
+  if (min < 60) return 'recent'
+  const h = Math.floor(min / 60)
+  if (h < 24) return `acum ${h}h`
+  const d = Math.floor(h / 24)
+  if (d === 1) return 'ieri'
+  if (d < 7) return `acum ${d} zile`
+  return new Date(iso).toLocaleDateString('ro-RO')
+}
 
-    <div style={{ padding: '0.75rem', borderTop: '1px solid rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-      <UserButton />
-      <div>
-        <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 500, color: '#111' }}>Contul meu</p>
-        <p style={{ margin: 0, fontSize: '0.72rem', color: '#aaa' }}>Plan Gratuit</p>
+const SidebarContent = () => {
+  const router = useRouter()
+  const [sites, setSites] = useState<Site[]>([])
+  const [loading, setLoading] = useState(true)
+
+  //incarcam site-urile reale la deschiderea sidebar-ului
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/sites')
+        const data = await res.json()
+        if (data.sites) setSites(data.sites)
+      } catch {
+        console.error('Sites fetch failed')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+        <Logo />
+        <Button
+          size="sm"
+          style={{ width: '100%', marginTop: '0.85rem', background: '#e91e63', color: '#fff', gap: '0.4rem' }}
+          onClick={() => router.push('/dashboard')}
+        >
+          <Plus size={13} /> Site nou
+        </Button>
+      </div>
+
+      <ScrollArea style={{ flex: 1 }}>
+        <div style={{ padding: '0.75rem' }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.5rem 0.25rem' }}>
+            Site-urile tale
+          </p>
+
+          {loading ? (
+            <p style={{ fontSize: '0.8rem', color: '#bbb', padding: '0.25rem' }}>Se încarcă...</p>
+          ) : sites.length === 0 ? (
+            <p style={{ fontSize: '0.8rem', color: '#bbb', padding: '0.25rem' }}>Niciun site încă</p>
+          ) : (
+            sites.map(site => (
+              <button key={site.id} style={{
+                width: '100%', textAlign: 'left', padding: '0.55rem 0.75rem',
+                borderRadius: '8px', border: 'none', background: 'transparent',
+                cursor: 'pointer', marginBottom: '2px', fontFamily: 'var(--font-jakarta), sans-serif',
+              }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#f5f5f5')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                onClick={() => router.push(`/dashboard/editor/${site.id}`)}
+              >
+                <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 500, color: '#111' }}>{site.title || site.name}</p>
+                <p style={{ margin: 0, fontSize: '0.72rem', color: '#aaa' }}>{timeAgo(site.updated_at)}</p>
+              </button>
+            ))
+          )}
+        </div>
+      </ScrollArea>
+
+      <div style={{ padding: '0.75rem', borderTop: '1px solid rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <UserButton />
+        <div>
+          <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 500, color: '#111' }}>Contul meu</p>
+          <p style={{ margin: 0, fontSize: '0.72rem', color: '#aaa' }}>Plan Gratuit</p>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default function AppSidebar() {
   return (

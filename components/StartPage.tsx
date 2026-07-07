@@ -6,16 +6,21 @@
 'use client'
 
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { UserButton } from '@clerk/nextjs'
-import { Button } from '@/components/ShadCN/button'
 import { ArrowRight, Wand2, ShoppingBag, FileText, Utensils, Briefcase } from 'lucide-react'
 import AppSidebar from './AppSidebar'
 import { useRouter } from 'next/navigation'
 
 
-
-
+type Site = {
+  id: string
+  name: string
+  title: string | null
+  current_version: number
+  updated_at: string
+  subdomain: string | null
+}
 
 
 const suggestions = [
@@ -26,21 +31,48 @@ const suggestions = [
 ]
 
 
-const placeholderSites = [
-  { id: '1', name: 'Site-ul meu', url: 'siteulmeu.clickandbuild.ro', time: 'modificat ieri' },
-  { id: '2', name: 'Proiect nou', url: 'proiectnou.clickandbuild.ro', time: 'acum 3 zile' },
-  { id: '3', name: 'Landing page', url: 'landingpage.clickandbuild.ro', time: 'săptămâna trecută' },
-  { id: '4', name: 'Portfolio', url: 'portfolio.clickandbuild.ro', time: 'acum 2 săptămâni' },
-]
+//transforma un timestamp intr-un text relativ (ex: "acum 3 zile")
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const min = Math.floor(diff / 60000)
+  if (min < 1) return 'chiar acum'
+  if (min < 60) return `acum ${min} min`
+  const h = Math.floor(min / 60)
+  if (h < 24) return `acum ${h} ${h === 1 ? 'oră' : 'ore'}`
+  const d = Math.floor(h / 24)
+  if (d === 1) return 'ieri'
+  if (d < 7) return `acum ${d} zile`
+  const w = Math.floor(d / 7)
+  if (w < 4) return `acum ${w} ${w === 1 ? 'săptămână' : 'săptămâni'}`
+  return new Date(iso).toLocaleDateString('ro-RO')
+}
 
 
 export default function StartPage() {
   const [prompt, setPrompt] = useState('')
+  const [sites, setSites] = useState<Site[]>([])
+  const [sitesLoading, setSitesLoading] = useState(true)
 
 
   //folosind react router evitam refresh-ul la schimbarea paginilor
   const router=useRouter();
 
+
+  //incarcam site-urile reale ale userului la mount
+  useEffect(() => {
+    const loadSites = async () => {
+      try {
+        const res = await fetch('/api/sites')
+        const data = await res.json()
+        if (data.sites) setSites(data.sites)
+      } catch {
+        console.error('Sites fetch failed')
+      } finally {
+        setSitesLoading(false)
+      }
+    }
+    loadSites()
+  }, [])
 
 
   //encode uri component e folosit pentru a putea trimite promptul in url
@@ -157,31 +189,39 @@ export default function StartPage() {
           <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 0.75rem' }}>
             Site-urile tale recente
           </p>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '0.6rem',
-          }}>
-            {placeholderSites.map(site => (
-              <button key={site.id} style={{
-                textAlign: 'left', padding: '0.85rem 1rem', borderRadius: '12px',
-                border: '1px solid rgba(0,0,0,0.08)', background: '#fff',
-                cursor: 'pointer', fontFamily: 'var(--font-jakarta), sans-serif',
-                transition: 'border-color 0.15s, box-shadow 0.15s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#e91e63'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(233,30,99,0.08)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
-                onClick={() => router.push(`/dashboard/editor/${site.id}`)}
-              >
-                <p style={{ margin: '0 0 2px', fontSize: '0.875rem', fontWeight: 600, color: '#111' }}>{site.name}</p>
-                <p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: '#aaa' }}>{site.time}</p>
-                <p style={{ margin: 0, fontSize: '0.7rem', color: '#e91e63', opacity: 0.7 }}>{site.url}</p>
-              </button>
-            ))}
-          </div>
+
+          {sitesLoading ? (
+            <p style={{ fontSize: '0.85rem', color: '#bbb' }}>Se încarcă...</p>
+          ) : sites.length === 0 ? (
+            <p style={{ fontSize: '0.85rem', color: '#bbb' }}>Încă nu ai site-uri. Creează primul mai sus!</p>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '0.6rem',
+            }}>
+              {sites.map(site => (
+                <button key={site.id} style={{
+                  textAlign: 'left', padding: '0.85rem 1rem', borderRadius: '12px',
+                  border: '1px solid rgba(0,0,0,0.08)', background: '#fff',
+                  cursor: 'pointer', fontFamily: 'var(--font-jakarta), sans-serif',
+                  transition: 'border-color 0.15s, box-shadow 0.15s',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#e91e63'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(233,30,99,0.08)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
+                  onClick={() => router.push(`/dashboard/editor/${site.id}`)}
+                >
+                  <p style={{ margin: '0 0 2px', fontSize: '0.875rem', fontWeight: 600, color: '#111' }}>{site.title || site.name}</p>
+                  <p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: '#aaa' }}>{timeAgo(site.updated_at)}</p>
+                  <p style={{ margin: 0, fontSize: '0.7rem', color: '#e91e63', opacity: 0.7 }}>
+                    {site.subdomain ? `${site.subdomain}.clickandbuild.ro` : `v${site.current_version}`}
+                  </p>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>
   )
 }
-
