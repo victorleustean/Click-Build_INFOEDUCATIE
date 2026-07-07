@@ -10,7 +10,9 @@
 //get relevant versions alege cele 5 delte semnificative,functia match_versions din sql face 
 //cosine similarity intre vectori si ii alege pei cei apropiati in spatiul semantic
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import { createPatch, applyPatch } from 'diff'
+import { reconstructFromVersions } from '@/lib/data/reconstruct'
+import { createPatch } from 'diff'
+import { slugify } from '@/lib/data/slugify'
 
 async function embed(text: string): Promise<number[]>
 { const res = await fetch('https://api.openai.com/v1/embeddings', 
@@ -180,17 +182,7 @@ export async function reconstructVersion(
     .lte('version_number', targetVersion)
     .order('version_number', { ascending: true })
 
-  if (!versions || versions.length === 0) throw new Error('Nicio versiune găsită')
-
-  // pornim de la STORE (v0) și aplicăm diff-urile pe rând
-  let code = versions[0].base_code || ''
-  for (let i = 1; i < versions.length; i++) {
-    const patched = applyPatch(code, versions[i].diff || '')
-    if (patched === false) throw new Error(`Diff invalid la versiunea ${versions[i].version_number}`)
-    code = patched
-  }
-
-  return code
+  return reconstructFromVersions(versions || [])
 }
 
 //  adauga o versiune noua cu codul reconstruit 
@@ -277,17 +269,7 @@ export async function listVersions(userId: string, siteId: string) {
   return { versions: data || [], currentVersion: site.current_version }
 }
 
-//tranforma titlul intr un url safle
-//Floraria Sofia -> floraria-sofia
-function slugify(text: string): string
-{ return text
-  .toLowerCase()
-  .normalize("NFD").replace(/[\u0300-\u036f]/g, "") //scoate diacriticele
-  .replace(/[^a-z0-9]+/g, "-") //tot ce nu e litera sau cifra e transformat in liniuta
-  .replace(/^-+|-+$/g, "")//fara liniuta la capetele textului
-  .slice(0, 40) || "site" //limitam lungimea unui url
 
-} 
 
 //publica un site: genereaza un subdomain unic din titlu si il salveaza
 export async function publishSite(userId: string, siteId: string): Promise<string>
