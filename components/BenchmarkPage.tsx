@@ -94,7 +94,7 @@ export default function BenchmarkSection()
                     width={isMobile ? 36 : 60}
                   />
                   <Tooltip
-                    formatter={(value: number) => [value.toLocaleString(lang === 'ro' ? 'ro-RO' : 'en-US') + ' ' + t('benchmark.tokens'), '']}
+                    formatter={(value: any) => [Number(value).toLocaleString(lang === 'ro' ? 'ro-RO' : 'en-US') + ' ' + t('benchmark.tokens'), '']}
                     labelFormatter={(label) => `${t('benchmark.editLabel')} ${label}`}
                     contentStyle={{ borderRadius: 10, border: '1px solid #eee', fontSize: 13 }}
                   />
