@@ -1,6 +1,13 @@
+'use client'
+
 import React from 'react'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 const Footer = () => {
+  const { t } = useLanguage()
+
+  const links = [t('nav.home'), t('nav.about'), t('nav.projects'), t('nav.plans'), t('nav.contact')]
+
   return (
     <footer style={{
       backgroundColor: '#0a0a0a',
@@ -27,7 +34,7 @@ const Footer = () => {
 
       {/* linkuri */}
       <nav style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {['Acasă', 'Despre noi', 'Proiecte', 'Abonamente', 'Contact'].map((item) => (
+        {links.map((item) => (
           <a key={item} href="#" style={{
             color: '#888',
             fontSize: '0.9rem',
@@ -46,7 +53,7 @@ const Footer = () => {
 
       {/* copyright */}
       <p style={{ color: '#444', fontSize: '0.8rem', margin: 0 }}>
-        © 2026 Click &amp;&amp; Build. Toate drepturile rezervate.
+        {t('footer.rights')}
       </p>
 
     </footer>

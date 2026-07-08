@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { runSimulation, summary, type SimPoint } from '@/lib/benchmark/simulate'
 import { TrendingUp, Play } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function BenchmarkSection()
 {
+  const { t, lang } = useLanguage()
   const [data, setData] = useState<SimPoint[] | null>(null)
   const [running, setRunning] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -48,15 +50,13 @@ export default function BenchmarkSection()
             borderRadius: 20, padding: '0.3rem 0.9rem', marginBottom: '1rem',
           }}>
             <TrendingUp size={12} color="#e91e63" />
-            <span style={{ fontSize: '0.75rem', color: '#e91e63', fontWeight: 600, marginTop: '5rem' }}>Tehnologie proprie · DCS</span>
+            <span style={{ fontSize: '0.75rem', color: '#e91e63', fontWeight: 600, marginTop: '5rem' }}>{t('benchmark.badge')}</span>
           </div>
           <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, color: '#111', margin: 0, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-            Editezi de 50 de ori. Costul rămâne mic.
+            {t('benchmark.title')}
           </h2>
           <p style={{ color: '#888', margin: '1rem auto 0', fontSize: isMobile ? '0.95rem' : '1.05rem', maxWidth: 640, lineHeight: 1.6 }}>
-            Majoritatea generatoarelor AI retrimit toată conversația la fiecare modificare, iar costul explodează.
-            Sistemul nostru de gestionare a contextului (DCS) injectează doar ce e relevant — așa editările rămân
-            rapide și ieftine oricât de mult lucrezi la site.
+            {t('benchmark.subtitle')}
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export default function BenchmarkSection()
               cursor: running ? 'default' : 'pointer', opacity: running ? 0.7 : 1,
               fontFamily: 'var(--font-jakarta), sans-serif',
             }}>
-              <Play size={16} /> {running ? 'Se rulează...' : 'Rulează simularea'}
+              <Play size={16} /> {running ? t('benchmark.running') : t('benchmark.run')}
             </button>
           </div>
         )}
@@ -84,29 +84,29 @@ export default function BenchmarkSection()
                   <CartesianGrid strokeDasharray="3 3" stroke="#ececec" />
                   <XAxis
                     dataKey="edit"
-                    label={isMobile ? undefined : { value: 'Numărul editării', position: 'insideBottom', offset: -10, fontSize: 13, fill: '#999' }}
+                    label={isMobile ? undefined : { value: t('benchmark.axisX'), position: 'insideBottom', offset: -10, fontSize: 13, fill: '#999' }}
                     tick={{ fontSize: 11, fill: '#bbb' }}
                   />
                   <YAxis
                     tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                    label={isMobile ? undefined : { value: 'Tokeni trimiși', angle: -90, position: 'insideLeft', fontSize: 13, fill: '#999' }}
+                    label={isMobile ? undefined : { value: t('benchmark.axisY'), angle: -90, position: 'insideLeft', fontSize: 13, fill: '#999' }}
                     tick={{ fontSize: 11, fill: '#bbb' }}
                     width={isMobile ? 36 : 60}
                   />
                   <Tooltip
-                    formatter={(value: number) => [value.toLocaleString('ro-RO') + ' tokeni', '']}
-                    labelFormatter={(label) => `Editarea ${label}`}
+                    formatter={(value: number) => [value.toLocaleString(lang === 'ro' ? 'ro-RO' : 'en-US') + ' ' + t('benchmark.tokens'), '']}
+                    labelFormatter={(label) => `${t('benchmark.editLabel')} ${label}`}
                     contentStyle={{ borderRadius: 10, border: '1px solid #eee', fontSize: 13 }}
                   />
                   <Legend verticalAlign="top" height={36} iconType="line" wrapperStyle={{ fontSize: isMobile ? 12 : 14 }} />
-                  <Line type="monotone" dataKey="naiveTokens" name="Abordare clasică" stroke="#bbb" strokeWidth={2.5} dot={false} />
-                  <Line type="monotone" dataKey="dcsTokens" name="Click && Build (DCS)" stroke="#e91e63" strokeWidth={3} dot={false} />
+                  <Line type="monotone" dataKey="naiveTokens" name={t('benchmark.legendNaive')} stroke="#bbb" strokeWidth={2.5} dot={false} />
+                  <Line type="monotone" dataKey="dcsTokens" name={t('benchmark.legendDcs')} stroke="#e91e63" strokeWidth={3} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
             <p style={{ textAlign: 'center', margin: '1.5rem 0 0', fontSize: isMobile ? '0.92rem' : '1rem', color: '#555' }}>
-              La a {stats.lastEdit}-a editare: <strong style={{ color: '#e91e63', fontWeight: 700 }}>{stats.economiePercent}% mai puțini tokeni</strong> decât abordarea clasică.
+              {t('benchmark.resultPrefix')} {stats.lastEdit}{t('benchmark.resultMid')} <strong style={{ color: '#e91e63', fontWeight: 700 }}>{stats.economiePercent}% {t('benchmark.resultTokens')}</strong> {t('benchmark.resultSuffix')}
             </p>
           </>
         )}

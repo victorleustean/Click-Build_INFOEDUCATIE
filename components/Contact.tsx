@@ -1,7 +1,12 @@
+'use client'
+
 import { SignUpButton } from '@clerk/nextjs'
 import { Button } from './ShadCN/button'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 const Contact = () => {
+  const { t } = useLanguage()
+
   return (
     <section style={{
       padding: '8rem 1.5rem',
@@ -21,7 +26,7 @@ const Contact = () => {
         margin: 0,
         maxWidth: '700px',
       }}>
-        Gata să începi?
+        {t('contact.title')}
       </h1>
       <p style={{
         fontSize: 'clamp(1rem, 2vw, 1.35rem)',
@@ -31,11 +36,11 @@ const Contact = () => {
         lineHeight: 1.6,
         opacity: 0.85,
       }}>
-        Alătură-te miilor de utilizatori care își construiesc site-ul cu Click &amp;&amp; Build — gratuit, acum.
+        {t('contact.subtitle')}
       </p>
       <SignUpButton forceRedirectUrl="/dashboard">
     <Button size="lg" style={{ backgroundColor: '#e91e63', color: '#fff', fontSize: '1rem', padding: '0.75rem 2.5rem', marginTop: '0.5rem' }}>
-        Creează-ți contul gratuit
+        {t('contact.cta')}
     </Button>
 </SignUpButton>
     </section>

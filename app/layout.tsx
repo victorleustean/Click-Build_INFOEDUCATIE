@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { roRO } from '@clerk/localizations'
+import { LanguageProvider } from '@/lib/i18n/LanguageContext'
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="ro" className={`${jakarta.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col" style={{ fontFamily: 'var(--font-jakarta), sans-serif' }}>
         <ClerkProvider localization={roRO}>
-          {children}
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
         </ClerkProvider>
       </body>
     </html>

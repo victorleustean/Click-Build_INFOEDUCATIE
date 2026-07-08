@@ -1,4 +1,7 @@
+'use client'
+
 import FlowingMenu from './React_Bits/FlowingMenu'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 const demoItems = [
     { link: 'https://brutariapetru.netlify.app/', text: 'Brutăria Petru', image: '/Bp.png' },
@@ -8,10 +11,12 @@ const demoItems = [
 ];
 
 const Projects = () => {
+  const { t } = useLanguage()
+
   return (
     <div style={{ height: '600px', position: 'relative' }}>
         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, color: '#111', letterSpacing: '-0.02em', lineHeight: 1.1, margin: '0 0 3rem 0', textAlign: 'center', padding: '3rem 1.5rem 0' }}>
-            Proiectele utilizatorilor
+            {t('projects.title')}
         </h1>
         <FlowingMenu
             items={demoItems}

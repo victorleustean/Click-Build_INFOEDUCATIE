@@ -194,7 +194,7 @@ export async function POST(req: NextRequest)
           - Codul trebuie complet funcțional, fără TODO sau placeholder-uri
           - Folosește imaginile Unsplash furnizate ca src pentru tag-uri <img>, cu objectFit: "cover"
           - Secțiuni recomandate: navbar, hero, despre, servicii/produse, galerie, testimoniale, contact, footer
-          - Toate textele în limba română
+          - LIMBA: detectează limba în care e scrisă descrierea utilizatorului și generează TOT textul site-ului în ACEEAȘI limbă. Dacă descrierea e în engleză, tot conținutul site-ului e în engleză; dacă e în română, în română. Potrivește limba conținutului cu limba cererii utilizatorului.
           - NU accesa React prin destructurare (const { useState } = React) și NU importa hook-uri. Folosește direct useState, useEffect etc. — sunt deja disponibile global.
           - Folosește DOAR iconițe care există cu siguranță în lucide-react. Dacă nu ești 100% sigur că o iconiță există, NU o folosi — alege una sigură (ex: Zap în loc de Lightning, Trash2, Menu, X, Check, Star, Heart, ArrowRight, Mail, Phone, MapPin). În caz de dubiu, folosește un <div> sau un caracter în loc de iconiță inexistentă.
           - ATENȚIE la sintaxa JSX: toate prop-urile de event folosesc forma exactă onClick={...}, onMouseEnter={...}, onMouseLeave={...} cu ACOLADE { }, niciodată paranteze. Verifică fiecare handler înainte de a finaliza.

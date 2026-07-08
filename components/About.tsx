@@ -1,28 +1,33 @@
+'use client'
+
 import React from 'react'
 import ElectricBorder from './React_Bits/ElectricBorder'
 import { Card, CardContent } from './ShadCN/card'
 import { Button } from './ShadCN/button'
 import { Wand2, Zap, Globe } from 'lucide-react'
-
-const cards = [
-  {
-    icon: <Wand2 size={32} color="#e91e63" />,
-    title: 'Generare AI',
-    description: 'Descrie site-ul tău în câteva cuvinte și AI-ul construiește totul pentru tine — layout, conținut și stil.',
-  },
-  {
-    icon: <Zap size={32} color="#e91e63" />,
-    title: 'Rapid ca un click',
-    description: 'De la idee la site live în secunde. Fără cod, fără așteptare, fără bătăi de cap.',
-  },
-  {
-    icon: <Globe size={32} color="#e91e63" />,
-    title: 'Publicat instant',
-    description: 'Site-ul tău ajunge online imediat, cu domeniu propriu și hosting inclus.',
-  },
-]
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 const About = () => {
+  const { t } = useLanguage()
+
+  const cards = [
+    {
+      icon: <Wand2 size={32} color="#e91e63" />,
+      title: t('about.card1.title'),
+      description: t('about.card1.desc'),
+    },
+    {
+      icon: <Zap size={32} color="#e91e63" />,
+      title: t('about.card2.title'),
+      description: t('about.card2.desc'),
+    },
+    {
+      icon: <Globe size={32} color="#e91e63" />,
+      title: t('about.card3.title'),
+      description: t('about.card3.desc'),
+    },
+  ]
+
   return (
     <section style={{
       padding: '5rem 1.5rem',
@@ -30,7 +35,7 @@ const About = () => {
       background: 'linear-gradient(to bottom, rgba(233,30,99,0.08) 0%, rgba(255,255,255,0) 100%)',
     }}>
       <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, color: '#111', letterSpacing: '-0.02em', lineHeight: 1.1, margin: '0 0 3rem 0' }}>
-        Visurile tale devin realitate cu Click &amp;&amp; Build
+        {t('about.title')}
       </h1>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.5rem' }}>
@@ -51,7 +56,7 @@ const About = () => {
 
       <div style={{ marginTop: '3rem' }}>
         <Button size="lg" style={{ backgroundColor: '#e91e63', color: '#fff', fontSize: '1rem', padding: '0.75rem 2rem' }}>
-          Încearcă acum
+          {t('about.cta')}
         </Button>
       </div>
     </section>
