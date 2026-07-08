@@ -2,7 +2,7 @@
 //gpt-4o-mini genereaza keywords pe baza titlului si promptului de la user
 //apoi folosind acele keywords facem fetch catre unsplash si returnam imagini real ca url
 //modelul mai alege si un design system din cele 4 din folderul-lib/design-sstems care are
-//rol de indrumare in design a modeluli, pe baza acestor date gpt 5 codex genreaza app.tsx
+//rol de indrumare in design a modeluli, pe baza acestor date gpt 5.5 genreaza app.tsx
 //salvarea cosdului se face folosind dcs
 import { getDesignSystems } from "@/lib/design-systems";
 import { NextRequest, NextResponse } from "next/server";
@@ -122,7 +122,7 @@ async function pickDesignSystem(prompt: string, title: string): Promise<string>
   }
 }
 
-//gpt 5 codex genereaza siteul folosind imaginile si designul determinate mai sus
+//gpt 5.5 genereaza siteul folosind imaginile si designul determinate mai sus
 //exportam codul curatat si imaginile
 export async function POST(req: NextRequest)
 { try
@@ -165,7 +165,7 @@ export async function POST(req: NextRequest)
         },
         body: JSON.stringify
         ({
-          model: "gpt-5-codex",
+          model: "gpt-5.5",
           instructions: `Ești un web designer și React developer de top. Generezi site-uri React complete, frumoase și moderne, dintr-un singur fișier. Un design frumos, modern și profesional este prioritatea ta numărul unu.
  
           DESIGN SYSTEM (SURSĂ DE INSPIRAȚIE, NU REGULĂ STRICTĂ):

@@ -41,6 +41,7 @@ function cleanCode(raw: string): string {
 }
 
 
+
 //editarea unui site prin DCS
 export async function POST(req: NextRequest)
 { try
@@ -89,7 +90,8 @@ export async function POST(req: NextRequest)
       },
       body: JSON.stringify
       ({
-        model: "gpt-5-codex",
+        model: "gpt-5.5",
+        reasoning: { effort: "low" },
         instructions: `Ești un expert React care MODIFICĂ un site existent.
 
 
