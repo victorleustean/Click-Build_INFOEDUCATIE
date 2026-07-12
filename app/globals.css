@@ -132,3 +132,36 @@
 html {
   scroll-behavior: smooth;
 }
+
+/*accesibilitate*/
+:root {
+  --text-secondary: #888888;
+  --text-tertiary: #aaaaaa;
+  --accent: #e91e63;
+}
+
+html[data-contrast="high"] #app-shell {
+  filter: contrast(1.45) brightness(1.03);
+}
+
+/* miscare redusa — respectam preferinta de sistem */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* focus vizibil la navigare cu tastatura */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+html[data-contrast="high"] :focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 2px;
+}

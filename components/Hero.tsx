@@ -7,6 +7,8 @@ import { Button } from './ShadCN/button';
 import TextType from './React_Bits/TextType';
 import { SignInButton, SignUpButton } from '@clerk/nextjs';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { Contrast } from 'lucide-react'
+import { useAccessibility } from '@/lib/a11y/AccessabilityContext'
 
 
 const Hero = () => {
@@ -53,6 +55,7 @@ const Hero = () => {
         {lang === 'ro' ? 'EN' : 'RO'}
     </button>
   )
+  
 
   return (
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>

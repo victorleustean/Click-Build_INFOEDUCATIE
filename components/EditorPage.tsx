@@ -13,6 +13,7 @@ import { useSearchParams } from 'next/navigation'
 import SuggestionCard from './SuggestionCard'
 import AppSidebar from './AppSidebar'
 import PreviewPanel from './PreviewPanel'
+import ContrastToggle from './ContrastToggle'
 
 
 type Message = { role: 'user' | 'ai'; text: string }
@@ -344,6 +345,7 @@ export default function EditorPage({ siteId: routeSiteId }: { siteId: string }) 
               <Globe size={13} /> {publishing ? 'Se publică...' : 'Publică'}
             </Button>
           )}
+          {!isMobile && <ContrastToggle />}
           {/* managerul Clerk — ascuns pe mobil (e deja in sidebar) */}
           {!isMobile && <UserButton />}
         </div>
@@ -413,7 +415,7 @@ export default function EditorPage({ siteId: routeSiteId }: { siteId: string }) 
                   fontFamily: 'var(--font-jakarta), sans-serif', lineHeight: 1.5, color: '#111',
                 }}
               />
-              <button onClick={handleSend} disabled={!canSend} style={{
+              <button onClick={handleSend} disabled={!canSend} aria-label="Trimite mesajul" style={{
                 width: '32px', height: '32px', borderRadius: '8px', flexShrink: 0,
                 background: canSend ? '#e91e63' : '#e5e5e5', border: 'none',
                 cursor: canSend ? 'pointer' : 'default',

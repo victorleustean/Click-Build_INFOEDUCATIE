@@ -4,6 +4,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { roRO } from '@clerk/localizations'
 import { LanguageProvider } from '@/lib/i18n/LanguageContext'
+import { AccessibilityProvider } from '@/lib/a11y/AccessabilityContext'
+import ContrastFAB from '@/components/ContrastToggle'
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -26,7 +28,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col" style={{ fontFamily: 'var(--font-jakarta), sans-serif' }}>
         <ClerkProvider localization={roRO}>
           <LanguageProvider>
-            {children}
+            <AccessibilityProvider>
+              <div id="app-shell" className="min-h-full flex flex-col flex-1">
+                {children}
+              </div>
+              <ContrastFAB />
+            </AccessibilityProvider>
           </LanguageProvider>
         </ClerkProvider>
       </body>
