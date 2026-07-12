@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"/>
   <img src="https://img.shields.io/badge/Supabase-pgvector-3ECF8E?logo=supabase&logoColor=white" alt="Supabase"/>
   <img src="https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel&logoColor=white" alt="Vercel"/>
-  <img src="https://github.com/victorleustean/Click-Build_INFOEDUCATIE/actions/workflows/test.yml/badge.svg" alt="Tests"/>
+  <img src="https://github.com/victorleustean/Click-Build_INFOEDUCATIE/actions/workflows/test.yaml/badge.svg" alt="Tests"/>
 </p>
 
 ---
