@@ -8,6 +8,8 @@
   <a href="./TEHNOLOGII.md">🧩 tehnologii externe</a>
 </p>
 
+
+<p align = "center">Proiect premiat cu medalie de bronz. Focsani, 31 iulie 2026</p>
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white" alt="Next.js"/>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"/>
